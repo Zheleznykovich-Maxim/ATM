@@ -12,8 +12,9 @@ public class AtmConsole {
     private final Scanner in = new Scanner(System.in);
     private boolean isAuthorized = false;
     private Card currentCard;
-    public AtmConsole(BankService bankService, boolean isAuthorized) {
+    public AtmConsole(BankService bankService) {
         this.bankService = bankService;
+        bankService.loadCardsFromFile();
     }
 
     public void start() {
@@ -36,6 +37,7 @@ public class AtmConsole {
                         int pin = in.nextInt();
                         Card card = new Card(cardNumber, pin, 0);
                         bankService.addCard(card);
+                        System.out.println("Карта успешно оформлена!");
                     }
                     case 2 -> {
                         System.out.print("Enter card number (XXXX-XXXX-XXXX-XXXX): ");
@@ -51,8 +53,11 @@ public class AtmConsole {
                             System.out.println("Your card is blocked. Please try again later.");
                             continue;
                         }
-
                         authorization(card);
+                    }
+                    case 3 -> {
+                        bankService.saveCardsToFile();
+                        return;
                     }
                 }
 
@@ -95,7 +100,7 @@ public class AtmConsole {
 
             switch (command) {
                 case 1 -> {
-                    System.out.print("Баланс данной карты составляет:" + currentCard.getBalance());
+                    System.out.println("Баланс данной карты составляет: " + currentCard.getBalance());
                 }
                 case 2 -> {
                     System.out.println("Введите сумму, которую хотите снять.");
@@ -112,7 +117,7 @@ public class AtmConsole {
                 case 3 -> {
                     System.out.println("Введите сумму, которую хотите пополнить.");
                     double replenishment_amount = in.nextDouble();
-                    if (replenishment_amount > currentCard.getBalance()) {
+                    if (replenishment_amount > ATM_LIMIT) {
                         System.out.println("Превышен лимит банкомата!");
                     } else {
                         currentCard.setBalance(currentCard.getBalance() + replenishment_amount);
@@ -122,6 +127,7 @@ public class AtmConsole {
                 case 4 -> {
                     bankService.saveCardsToFile();
                     isAuthorized = false;
+                    return;
                 }
                 default -> System.out.println("Введена неверная команда!");
             }

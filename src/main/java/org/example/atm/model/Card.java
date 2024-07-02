@@ -30,7 +30,7 @@ public class Card {
     }
 
     public void setBalance(double balance) {
-        this.balance = balance;
+        this.balance = roundValue(balance);
     }
 
     public int getAttempts() {
@@ -63,5 +63,9 @@ public class Card {
     public void blockCard() {
         this.isBlocked = true;
         this.blockTime = System.currentTimeMillis();
+    }
+
+    private double roundValue(double value) {
+        return Math.round(value * 100.0) / 100.0;
     }
 }

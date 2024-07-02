@@ -4,6 +4,7 @@ import org.example.atm.model.Card;
 import org.example.atm.repository.CardRepository;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -18,6 +19,16 @@ public class BankService {
         this.cardRepository = cardRepository;
     }
 
+    public void ensureDataFileExists() {
+        File file = new File(cardFileName);
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                System.out.println("Error creating data file: " + e.getMessage());
+            }
+        }
+    }
     public void loadCardsFromFile() {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(cardFileName))) {
             String line;

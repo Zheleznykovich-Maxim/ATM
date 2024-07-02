@@ -3,7 +3,6 @@ package org.example.atm.in;
 import org.example.atm.model.Card;
 import org.example.atm.out.ConsoleUI;
 import org.example.atm.service.BankService;
-
 import java.time.LocalDateTime;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -22,6 +21,7 @@ public class AtmConsole {
 
     public AtmConsole(BankService bankService) {
         this.bankService = bankService;
+        bankService.ensureDataFileExists();
         bankService.loadCardsFromFile();
     }
 

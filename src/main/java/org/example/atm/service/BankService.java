@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class BankService {
     private final CardRepository cardRepository;
-    private static final String cardFileName = "cards.txt";
+    private static final String cardFileName = "src/main/resources/cards.txt";
 
     public BankService(CardRepository cardRepository) {
         this.cardRepository = cardRepository;
